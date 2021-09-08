@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "outDir":"./build/",
+        "noImplicitAny": false,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "target":"ES2020",
+        "experimentalDecorators": true,
+        "esModuleInterop": true,
+        "jsx": "react",
+        "declaration": true
+    },
+    "include": [
+        "src/**/*.ts", "src/index.ts", "src/tests/**/*.spec.ts", "src/*.tsx"
+, "src/server/routes/home.tsx", "src/client/Index.tsx"],
+    "exclude": [
+        "node_modules"
+    ],
+    "types": ["node"]
+}

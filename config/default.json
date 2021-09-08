@@ -1,0 +1,11 @@
+{
+    "jwtTimeout": "1800s",
+    "db": {
+        "host": "localhost",
+        "user": "pro-web-user",
+        "password": "xx",
+        "database": "proweb",
+        "socketPath": "/var/run/mysqld/mysqld.sock"
+    }
+
+}
