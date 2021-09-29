@@ -19,7 +19,6 @@ describe("Authentication api tests", function() {
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {
-                    console.log(res.body)
                     expect(res.body).to.be.an("object")
                     expect(res.body.IsError).to.equal(false)
                     expect(res.body.Message).to.equal(StubCore.Enums.ResponseMessages.OK.toString())
@@ -43,7 +42,7 @@ describe("Authentication api tests", function() {
                 })
 
         })
-        
+
     })
     describe("login tests", function() {        
         it("should not login an invalid user", (done) => {
