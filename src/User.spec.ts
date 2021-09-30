@@ -4,6 +4,7 @@ import { expect } from "chai"
 import Core from "pro-web-core"
 import config from "config"
 import StubCore from "./StubCore"
+import { testuserid1, testpubkey1 } from "./testingUtils/constants"
 
 const userService = new Core.Service.User(config.get("db"))
 
@@ -13,7 +14,7 @@ describe("User api tests", function() {
         it("post /user should return 200 + proper response", (done) => {
             const expectedValue: number = 1
             request(app)
-                .post("/user", {username: "[[TEST]]", publicKey: "test"})
+                .post("/user", {username: testuserid1, publicKey: testpubkey1})
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {
@@ -27,7 +28,7 @@ describe("User api tests", function() {
                 })
         })
         it("get /unique/username with unique username should return Response<true>", (done) => {
-            const uniqueUsername = "TEST"
+            const uniqueUsername = testuserid1
             request(app)
                 .get(`/user/unique/${uniqueUsername}`)
                 .expect("Content-Type", /json/)
