@@ -15,7 +15,7 @@ describe("Authentication api tests", function() {
     describe("request session tests", function() {
         it("a valid username without a token should return a response<string> with a challenge", (done) => {
             requestApp
-                .get(`/request-session/${testuserid1}`)
+                .get(`/api/request-session/${testuserid1}`)
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {
@@ -28,12 +28,11 @@ describe("Authentication api tests", function() {
         })
         it("a valid username with a valid token should return 400", (done) => {
             request(app)
-                .post("/login")
+                .post("/api/login")
                 .send({username: testuserid1, password: testchallenge1})            
                 .end((err, res) => {
                     request(app)
-                        .get(`/request-session/${testuserid1}`)                    
-                        .set("authorization", res.body.token)
+                        .get(`/api/request-session/${testuserid1}`)                    
                         .expect("Content-Type", /json/)
                         .end((reqa, resa) => {
                             expect(resa.statusCode).to.equal(400)
@@ -43,22 +42,22 @@ describe("Authentication api tests", function() {
 
         })
 
+
     })
     describe("login tests", function() {        
         it("should not login an invalid user", (done) => {
             request(app)
-                .post(`/login`).send({username: "TETTTS", password: testchallenge1})
+                .post(`/api/login`).send({username: "TETTTS", password: testchallenge1})
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {
-                    expect(res.body).to.have.property("token")
-                    expect(res.body.token).to.equal(null)
+                    expect(res.body).to.equal("ok")
                     done()
                 })
         })
         it("should not login an invalid challenge", (done) => {
             request(app)
-                .post(`/login`).send({username: testuserid1, password: "BLABLABLA"})
+                .post(`/api/login`).send({username: testuserid1, password: "BLABLABLA"})
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {
@@ -67,15 +66,21 @@ describe("Authentication api tests", function() {
                     done()
                 })
         })
-        it("should login a valid user", (done) => {
+        it("should login and logout valid user", (done) => {
             request(app)
-                .post(`/login`).send({username: testuserid1, password: testchallenge1})
+                .post(`/api/login`).send({username: testuserid1, password: testchallenge1})
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {
-                    expect(res.body).to.have.property("token")
-                    expect(res.body.token).to.be.a("string")
-                    done()
+                    expect(res.body).to.equal("ok")
+                    request(app)
+                    .get(`/api/logout`)
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(res).to.equal("OK")
+                        done()
+                    })
                 })
         })
     })
@@ -83,12 +88,18 @@ describe("Authentication api tests", function() {
         const requestApp = request(app)
         it("a request to a protected page should succeed with a token", (done) => {
             requestApp
-                .post("/login")
+                .post("/api/login")
                 .send({username: testuserid1, password: testchallenge1})
                 .end((err, res) => {
+                    const _cookie = res.headers["set-cookie"][0] ? 
+                        decodeURI(res.headers["set-cookie"][0]
+                            .replace("Path", "")
+                            .replace("authorization=Bearer", "")
+                            .replace("Path=", "")): ""
+                    const cookie = `authorization=${_cookie}`
                     requestApp
-                        .get("/board/abc")
-                        .set("authorization", res.body.token)
+                        .get("/api/board/abc")
+                        .set("Cookie", cookie)
                         .expect("Content-Type", /text-html/)
                         .expect(200)
                         .end((err, resa) => {
@@ -99,7 +110,7 @@ describe("Authentication api tests", function() {
         })
         it("a request to a protected page should fail without a token", (done) => {
             requestApp
-                .get("/board/abc")
+                .get("/api/board/abc")
                 .expect("Content-Type", /text-html/)
                 .expect(401)
                 .end((err, resa) => {
@@ -109,7 +120,7 @@ describe("Authentication api tests", function() {
         })
         it("a request to a protected page shuold fail with an invalid tokens", () => {
             requestApp
-                .get("/board/abc")
+                .get("/api/board/abc")
                 .set("authorization", "abcdef")
                 .expect("Content-Type", /text-html/)
                 .expect(401)

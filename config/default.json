@@ -6,6 +6,9 @@
         "password": "xx",
         "database": "proweb",
         "socketPath": "/var/run/mysqld/mysqld.sock"
+    },
+    "cookieSettings": {
+        "httpOnly": true
     }
 
 }
