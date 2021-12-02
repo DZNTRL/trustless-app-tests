@@ -14,7 +14,7 @@ describe("User api tests", function() {
         it("post /user should return 200 + proper response", (done) => {
             const expectedValue: number = 1
             request(app)
-                .post("/user", {username: testuserid1, publicKey: testpubkey1})
+                .post("/api/user", {username: testuserid1, publicKey: testpubkey1})
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {
@@ -30,7 +30,7 @@ describe("User api tests", function() {
         it("get /unique/username with unique username should return Response<true>", (done) => {
             const uniqueUsername = testuserid1
             request(app)
-                .get(`/user/unique/${uniqueUsername}`)
+                .get(`/api/user/unique/${uniqueUsername}`)
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {
@@ -46,7 +46,7 @@ describe("User api tests", function() {
         it("get /unique/username with unique username should return Response<false>", (done) => {
             const uniqueUsername = "BADC"
             request(app)
-                .get(`/user/unique/${uniqueUsername}`)
+                .get(`/api/user/unique/${uniqueUsername}`)
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {

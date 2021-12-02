@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "pro-web-app": "./node_modules/pro-web-app",
+    "pro-web-app": "^0.0.2",
+    "pro-web-common": "^1.0.6",
     "sinon": "^11.1.2",
     "supertest": "^6.1.6"
   },
