@@ -1,13 +1,14 @@
-import { IResponse } from "pro-web-core"
-import Core from "pro-web-core"
-import { IUser } from "pro-web-core/src/interfaces/models/IUser"
+import { IResponse } from "pro-web-common/dist/js/interfaces/IResponse"
+import { Response } from "pro-web-common/dist/js/Response"
+import { ResponseMessages } from "pro-web-common/dist/js/enums/ResponseMessages"
+import { IUser } from "pro-web-common/dist/js/interfaces/models/IUser"
 import { testuserid1, testchallenge1, testpubkey1 } from "../constants"
 
 
 export default function() {
     this.verifyChallenge = function(username, challenge) {
         return new Promise<IResponse<boolean>>((res, rej) => {
-            var resp = new Core.Response<boolean>(true)
+            var resp = new Response<boolean>(true)
             if(username === testuserid1 && challenge === testchallenge1) {
             } else {
                 resp.Data = false
@@ -17,7 +18,7 @@ export default function() {
     }
     this.get = function(username) {
         return new Promise<IResponse<IUser>>((res, rej) => {
-            const resp = new Core.Response<IUser>()
+            const resp = new Response<IUser>()
             if(username === testuserid1) {
                 resp.Data = {
                     username: testuserid1,
@@ -26,14 +27,14 @@ export default function() {
                     isAdmin: false
                 }
             } else {
-                resp.Message = Core.Enums.ResponseMessages.NotFound.toString()
+                resp.Message = ResponseMessages.NotFound.toString()
             }
-            res(resp)
+             res(resp)
         })
     }
     this.checkUsernameUnique = function(username) {
         return new Promise<IResponse<boolean>>((res, rej) => {
-            const resp = new Core.Response<boolean>(true)
+            const resp = new Response<boolean>(true)
             if(username !== testuserid1) {
                 resp.Data = false
             }
@@ -42,17 +43,17 @@ export default function() {
     }
     this.requestLogin = function(username) {
         return new Promise((res, rej) => {
-            const resp = new Core.Response<string>(testchallenge1);
+            const resp = new Response<string>(testchallenge1);
             if(username !== testuserid1) {
                 resp.Data = null
-                resp.Message = Core.Enums.ResponseMessages.NotFound.toString()
+                resp.Message = ResponseMessages.NotFound.toString()
             }
             res(resp)    
         })
     }
     this.login = function(username, challenge) {
         return new Promise((res, rej) => {
-            const resp = new Core.Response<boolean>(true)
+            const resp = new Response<boolean>(true)
             if(username !== testuserid1 || challenge !== testchallenge1) {
                 resp.Data = false
             }
